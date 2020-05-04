@@ -1,8 +1,6 @@
-import {DocumentsEnum} from "../enums/documents.enum";
-
 export interface GroupInterface {
     id: number;
+    documentId: number;
     name: string;
-    document: DocumentsEnum;
     createDate: number;
 }
