@@ -1,0 +1,5 @@
+{
+  "dbLogin": "admin",
+  "dbPassword": "9h0Fc0gFl4FfXwmb",
+  "dbAddress": "mongodb+srv://admin:<9h0Fc0gFl4FfXwmb>@cluster0-awbma.mongodb.net/test?retryWrites=true&w=majority"
+}

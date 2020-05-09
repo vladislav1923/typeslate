@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
 import { DocumentsService } from './documents.service';
 import { DocumentInterface } from '../../interfaces/document.interface';
 
@@ -18,8 +18,8 @@ export class DocumentsController {
     }
 
     @Post()
-    public createDocument(): DocumentInterface {
-        return this.documentsService.createDocument();
+    public async createDocument(@Body() data: DocumentInterface): Promise<DocumentInterface> {
+        return await this.documentsService.createDocument(data);
     }
 
     @Put()
