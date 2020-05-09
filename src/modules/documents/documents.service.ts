@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DocumentInterface } from '../../interfaces/document.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { DocumentDto } from '../../dtos/document.dto';
 
 @Injectable()
 export class DocumentsService {
@@ -10,22 +11,32 @@ export class DocumentsService {
       @InjectModel('Document') private model: Model<DocumentInterface>
     ) {}
 
-    public getDocuments(): DocumentInterface[] {
-        return [];
+    public async getDocuments(): Promise<DocumentDto[]> {
+        return this.model.find();
     }
 
-    public async createDocument(data: DocumentInterface): Promise<DocumentInterface> {
-        const createdDocument = new this.model(data);
-
-        return createdDocument.save();
+    public async getDocumentById(id: string): Promise<DocumentDto> {
+        return this.model.findOne({_id: id});
     }
 
-    public updateDocument(): DocumentInterface {
-        return {} as DocumentInterface;
+    public async createDocument(data: DocumentDto): Promise<DocumentDto> {
+        const document = { ...data} as DocumentInterface;
+        delete document._id;
+
+        return new this.model(document).save();
     }
 
-    public deleteDocument(): DocumentInterface {
-        return {} as DocumentInterface;
+    public async updateDocument(id: string, data: DocumentDto): Promise<DocumentDto> {
+        const document = { ...data} as DocumentInterface;
+        delete document._id;
+
+        return this.model.findOneAndUpdate({_id: id}, document, {
+            new: true
+        });
+    }
+
+    public async deleteDocument(id: string): Promise<DocumentDto> {
+        return this.model.findOneAndDelete({_id: id});
     }
 
 }

@@ -11,9 +11,9 @@ import { DocumentsModule } from "../documents/documents.module";
     GroupsModule,
     ArticlesModule,
     DocumentsModule,
-    MongooseModule.forRoot('mongodb+srv://vlad:JzYOBEYoXOhooYL5@cluster0-zx97w.mongodb.net/test?retryWrites=true&w=majority',
-      {useNewUrlParser: true}
-    )
+    MongooseModule.forRoot('mongodb://127.0.0.1:27017/', {
+      useFindAndModify: false
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
