@@ -1,6 +1,10 @@
 import * as mongoose from 'mongoose';
 
-export const DocumentSchema = new mongoose.Schema({
+export const GroupSchema = new mongoose.Schema({
+  documentId: {
+    type: String,
+    required: true
+  },
   title: {
     type: String,
     required: true

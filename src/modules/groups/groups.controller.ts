@@ -1,8 +1,8 @@
-import {Controller, Delete, Get, Post, Put} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { GroupsService } from './groups.service';
-import {GroupInterface} from "../../interfaces/group.interface";
+import { GroupDto } from '../../dtos/group.dto';
 
-@Controller()
+@Controller('groups')
 export class GroupsController {
 
     private readonly groupsService: GroupsService;
@@ -12,23 +12,28 @@ export class GroupsController {
     }
 
     @Get()
-    public getGroups(): GroupInterface[] {
-        return this.groupsService.getGroups();
+    public async getGroups(): Promise<GroupDto[]>{
+        return await this.groupsService.getGroups();
+    }
+
+    @Get(':id')
+    public async getGroupById(@Param() params): Promise<GroupDto> {
+        return await this.groupsService.getGroupById(params.id);
     }
 
     @Post()
-    public createGroup(): GroupInterface {
-        return this.groupsService.createGroup();
+    public async createGroup(@Body() data: GroupDto): Promise<GroupDto> {
+        return await this.groupsService.createGroup(data);
     }
 
-    @Put()
-    public updateGroup(): GroupInterface {
-        return this.groupsService.updateGroup();
+    @Put(':id')
+    public async updateGroup(@Param() params, @Body() data: GroupDto): Promise<GroupDto> {
+        return await this.groupsService.updateGroup(params.id, data);
     }
 
-    @Delete()
-    public deleteGroup(): GroupInterface {
-        return this.groupsService.deleteGroup();
+    @Delete(':id')
+    public async deleteGroup(@Param() params): Promise<GroupDto> {
+        return await this.groupsService.deleteGroup(params.id);
     }
 
 }

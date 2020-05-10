@@ -1,23 +1,41 @@
 import { Injectable } from '@nestjs/common';
 import { ArticleInterface } from '../../interfaces/article.interface';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from "mongoose";
+import { ArticleDto } from '../../dtos/article.dto';
 
 @Injectable()
 export class ArticlesService {
 
-    public getArticlesByGroupId(): ArticleInterface[] {
-        return [];
+    constructor(
+      @InjectModel('Article') private articleModel: Model<ArticleInterface>,
+    ) {}
+
+    public async getArticles(): Promise<ArticleDto[]> {
+        return this.articleModel.find();
     }
 
-    public createArticle(): ArticleInterface {
-        return {} as ArticleInterface;
+    public async getArticleById(id: string): Promise<ArticleDto> {
+        return this.articleModel.findOne({_id: id});
     }
 
-    public updateArticle(): ArticleInterface {
-        return {} as ArticleInterface;
+    public async createArticle(data: ArticleDto): Promise<ArticleDto> {
+        const article = { ...data} as ArticleInterface;
+        delete article._id;
+
+        return new this.articleModel(article).save();
     }
 
-    public deleteArticle(): ArticleInterface {
-        return {} as ArticleInterface;
+    public async updateArticle(id: string, data: ArticleDto): Promise<ArticleDto> {
+        const article = { ...data} as ArticleInterface;
+        delete article._id;
+
+        return this.articleModel.findOneAndUpdate({_id: id}, article, {
+            new: true
+        });
     }
 
+    public async deleteArticle(id: string): Promise<ArticleDto> {
+        return this.articleModel.findOneAndDelete({_id: id});
+    }
 }

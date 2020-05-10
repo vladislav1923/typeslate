@@ -1,8 +1,11 @@
 import { IsInt, IsString } from 'class-validator';
 
-export class DocumentDto {
+export class GroupDto {
 
   public readonly _id: string;
+
+  @IsString()
+  public readonly documentId: string;
 
   @IsString()
   public readonly title: string;

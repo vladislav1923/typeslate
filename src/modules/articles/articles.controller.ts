@@ -1,6 +1,6 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
-import { ArticleInterface } from '../../interfaces/article.interface';
+import { ArticleDto } from '../../dtos/article.dto';
 
 @Controller('articles')
 export class ArticlesController {
@@ -12,23 +12,28 @@ export class ArticlesController {
     }
 
     @Get()
-    public getArticlesByGroupId(): ArticleInterface[] {
-        return this.articlesService.getArticlesByGroupId();
+    public async getArticles(): Promise<ArticleDto[]> {
+        return await this.articlesService.getArticles();
+    }
+
+    @Get(':id')
+    public async getArticleById(@Param() params): Promise<ArticleDto> {
+        return await this.articlesService.getArticleById(params.id);
     }
 
     @Post()
-    public createArticle(): ArticleInterface {
-        return this.articlesService.createArticle();
+    public async createArticle(@Body() data: ArticleDto): Promise<ArticleDto> {
+        return await this.articlesService.createArticle(data);
     }
 
-    @Put()
-    public updateArticle(): ArticleInterface {
-        return this.articlesService.updateArticle();
+    @Put(':id')
+    public async updateArticle(@Param() params, @Body() data: ArticleDto): Promise<ArticleDto> {
+        return await this.articlesService.updateArticle(params.id, data);
     }
 
-    @Delete()
-    public deleteArticle(): ArticleInterface {
-        return this.articlesService.deleteArticle();
+    @Delete(':id')
+    public deleteArticle(@Param() params): Promise<ArticleDto> {
+        return this.articlesService.deleteArticle(params.id);
     }
 
 }

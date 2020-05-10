@@ -5,14 +5,20 @@ import { AppService } from './app.service';
 import { GroupsModule } from '../groups/groups.module';
 import { ArticlesModule } from "../articles/articles.module";
 import { DocumentsModule } from "../documents/documents.module";
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     GroupsModule,
     ArticlesModule,
     DocumentsModule,
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/', {
-      useFindAndModify: false
+    ConfigModule.forRoot(),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+      }),
+      inject: [ConfigService],
     })
   ],
   controllers: [AppController],
